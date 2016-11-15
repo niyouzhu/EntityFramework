@@ -196,7 +196,6 @@ namespace Microsoft.EntityFrameworkCore.InMemory.FunctionalTests
                     {
                         b.HasKey(e => new { e.Id1, e.Id2, e.Id3 });
                         b.Property(e => e.Id1).ValueGeneratedOnAdd();
-                        b.Property(e => e.Id3).ValueGeneratedOnAdd();
                     });
 
                 modelBuilder.Entity<EarthPony>().HasKey(e => new { e.Id1, e.Id2 });

@@ -693,8 +693,8 @@ namespace Microsoft.EntityFrameworkCore.Tests.ChangeTracking
 
             protected internal override void OnModelCreating(ModelBuilder modelBuilder)
             {
-                modelBuilder.Entity<Chunky>().Property(e => e.Id).ValueGeneratedNever();
-                modelBuilder.Entity<Cherry>().Property(e => e.Id).ValueGeneratedNever();
+                modelBuilder.Entity<Chunky>().Property(e => e.Id).Metadata.RequiresValueGenerator = false;
+                modelBuilder.Entity<Cherry>().Property(e => e.Id).Metadata.RequiresValueGenerator = false;
             }
         }
     }

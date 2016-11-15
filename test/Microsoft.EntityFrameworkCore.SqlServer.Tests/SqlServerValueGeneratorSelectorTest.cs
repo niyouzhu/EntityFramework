@@ -17,7 +17,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Tests
         [Fact]
         public void Returns_built_in_generators_for_types_setup_for_value_generation()
         {
-            var model = BuildModel();
+            var model = BuildModel(generateValues: false);
             var entityType = model.FindEntityType(typeof(AnEntity));
 
             var selector = SqlServerTestHelpers.Instance.CreateContextServices(model).GetRequiredService<IValueGeneratorSelector>();
@@ -62,11 +62,6 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Tests
             model.SqlServer().GetOrAddSequence(SqlServerModelAnnotations.DefaultHiLoSequenceName);
             var entityType = model.FindEntityType(typeof(AnEntity));
 
-            foreach (var property in entityType.GetProperties())
-            {
-                property.ValueGenerated = ValueGenerated.OnAdd;
-            }
-
             var selector = SqlServerTestHelpers.Instance.CreateContextServices(model).GetRequiredService<IValueGeneratorSelector>();
 
             Assert.IsType<SqlServerSequenceHiLoValueGenerator<int>>(selector.Select(entityType.FindProperty("Id"), entityType));
@@ -82,7 +77,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Tests
             Assert.IsType<SqlServerSequenceHiLoValueGenerator<char>>(selector.Select(entityType.FindProperty("NullableChar"), entityType));
             Assert.IsType<TemporaryDecimalValueGenerator>(selector.Select(entityType.FindProperty("Decimal"), entityType));
             Assert.IsType<StringValueGenerator>(selector.Select(entityType.FindProperty("String"), entityType));
-            Assert.IsType<SequentialGuidValueGenerator>(selector.Select(entityType.FindProperty("Guid"), entityType));
+            Assert.IsType<TemporaryGuidValueGenerator>(selector.Select(entityType.FindProperty("Guid"), entityType));
             Assert.IsType<BinaryValueGenerator>(selector.Select(entityType.FindProperty("Binary"), entityType));
             Assert.IsType<TemporaryIntValueGenerator>(selector.Select(entityType.FindProperty("AlwaysIdentity"), entityType));
             Assert.IsType<SqlServerSequenceHiLoValueGenerator<int>>(selector.Select(entityType.FindProperty("AlwaysSequence"), entityType));
@@ -129,8 +124,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Tests
 
             foreach (var property in entityType.GetProperties())
             {
-                property.RequiresValueGenerator = generateValues;
-                property.ValueGenerated = ValueGenerated.OnAdd;
+                property.ValueGenerated = generateValues ? ValueGenerated.OnAdd : ValueGenerated.Never;
             }
 
             entityType.FindProperty("AlwaysIdentity").ValueGenerated = ValueGenerated.OnAdd;

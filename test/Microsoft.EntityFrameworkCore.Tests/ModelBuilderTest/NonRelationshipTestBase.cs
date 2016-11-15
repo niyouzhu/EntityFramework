@@ -155,7 +155,7 @@ namespace Microsoft.EntityFrameworkCore.Tests
                 var nameProperty = entity.FindPrimaryKey().Properties.Single();
                 Assert.Equal(Customer.NameProperty.Name, nameProperty.Name);
                 Assert.True(nameProperty.RequiresValueGenerator);
-                Assert.Equal(ValueGenerated.OnAdd, nameProperty.ValueGenerated);
+                Assert.Equal(ValueGenerated.Never, nameProperty.ValueGenerated);
 
                 var idProperty = (IProperty)entity.FindProperty(Customer.IdProperty);
                 Assert.False(idProperty.RequiresValueGenerator);
@@ -640,7 +640,7 @@ namespace Microsoft.EntityFrameworkCore.Tests
 
                 modelBuilder.Entity<Quarks>(b =>
                     {
-                        b.Property(e => e.Id).Metadata.RequiresValueGenerator = false;
+                        b.HasKey(e => e.Id);
                         b.Property(e => e.Up).Metadata.RequiresValueGenerator = true;
                         b.Property(e => e.Down).Metadata.RequiresValueGenerator = true;
                         b.Property<int>("Charm").Metadata.RequiresValueGenerator = true;
@@ -651,7 +651,7 @@ namespace Microsoft.EntityFrameworkCore.Tests
 
                 var entityType = model.FindEntityType(typeof(Quarks));
 
-                Assert.Equal(false, entityType.FindProperty(Customer.IdProperty.Name).RequiresValueGenerator);
+                Assert.Equal(true, entityType.FindProperty(Customer.IdProperty.Name).RequiresValueGenerator);
                 Assert.Equal(true, entityType.FindProperty("Up").RequiresValueGenerator);
                 Assert.Equal(true, entityType.FindProperty("Down").RequiresValueGenerator);
                 Assert.Equal(true, entityType.FindProperty("Charm").RequiresValueGenerator);
@@ -679,7 +679,6 @@ namespace Microsoft.EntityFrameworkCore.Tests
 
                 var entityType = model.FindEntityType(typeof(Quarks));
 
-                Assert.Equal(ValueGenerated.OnAdd, entityType.FindProperty(Customer.IdProperty.Name).ValueGenerated);
                 Assert.Equal(ValueGenerated.OnAddOrUpdate, entityType.FindProperty("Up").ValueGenerated);
                 Assert.Equal(ValueGenerated.Never, entityType.FindProperty("Down").ValueGenerated);
                 Assert.Equal(ValueGenerated.OnAdd, entityType.FindProperty("Charm").ValueGenerated);

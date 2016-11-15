@@ -2944,7 +2944,11 @@ namespace Microsoft.EntityFrameworkCore.Tests.Metadata.Internal
 
             protected internal override void OnModelCreating(ModelBuilder modelBuilder)
             {
-                modelBuilder.Entity<Level1>().HasOne(e => e.Level1Reference).WithMany(e => e.Level1Collection);
+                modelBuilder.Entity<Level1>(eb =>
+                    {
+                        eb.HasOne(e => e.Level1Reference).WithMany(e => e.Level1Collection);
+                        eb.Property(e => e.Id).ValueGeneratedOnAdd();
+                    });
                 modelBuilder.Entity<Level2>().HasOne(e => e.Level2Reference).WithMany(e => e.Level2Collection);
                 modelBuilder.Entity<Level3>().HasOne(e => e.Level3Reference).WithMany(e => e.Level3Collection);
             }
@@ -3283,6 +3287,8 @@ namespace Microsoft.EntityFrameworkCore.Tests.Metadata.Internal
                         b.HasMany(e => e.CollectionNav)
                             .WithOne();
 
+                        b.Property(e => e.Id).ValueGeneratedOnAdd();
+                        b.Property(e => e.AnotherEntityId).ValueGeneratedOnAdd();
                         b.Property(e => e.Token).IsConcurrencyToken();
                     });
 

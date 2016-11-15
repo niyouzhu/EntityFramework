@@ -189,6 +189,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.FunctionalTests
         {
             public string Id { get; set; }
             public string TheWalrus { get; set; }
+            public virtual int NumericId { get; set; }
         }
 
         private class EnNum
@@ -450,7 +451,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.FunctionalTests
                 {
                     context.Database.EnsureCreated();
 
-                    context.Characters.Add(new PlayerCharacter(new Level { Game = new Game() }));
+                    context.Characters.Add(new PlayerCharacter(new Level { Game = new Game(), Id = 1 }) { Id = 1 });
 
                     context.SaveChanges();
                 }
@@ -480,7 +481,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.FunctionalTests
                 Game = level.Game;
             }
 
-            public virtual int Id { get; private set; }
+            public virtual int Id { get; set; }
             public virtual Level Level { get; set; }
             public virtual int GameId { get; private set; }
             public virtual Game Game { get; set; }

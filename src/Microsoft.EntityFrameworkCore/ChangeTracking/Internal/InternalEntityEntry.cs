@@ -960,7 +960,8 @@ namespace Microsoft.EntityFrameworkCore.ChangeTracking.Internal
         /// </summary>
         public virtual bool IsKeySet => !EntityType.FindPrimaryKey().Properties.Any(
             p => p.ClrType.IsDefaultValue(this[p])
-                 && (p.ValueGenerated == ValueGenerated.OnAdd
+                 && (p.RequiresValueGenerator
+                     || p.ValueGenerated == ValueGenerated.OnAdd
                      || p.IsForeignKey()));
 
         /// <summary>

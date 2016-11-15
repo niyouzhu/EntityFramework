@@ -59,7 +59,6 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.FunctionalTests
             protected override void OnModelCreating(ModelBuilder modelBuilder)
                 => modelBuilder.Entity<KettleChips>()
                     .Property(e => e.BestBuyDate)
-                    .ValueGeneratedOnAdd()
                     .HasDefaultValue(new DateTime(2035, 9, 25));
         }
 

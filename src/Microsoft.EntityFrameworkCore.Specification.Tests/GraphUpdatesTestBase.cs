@@ -6988,8 +6988,6 @@ namespace Microsoft.EntityFrameworkCore.Specification.Tests
             {
                 modelBuilder.Entity<Root>(b =>
                     {
-                        b.Property(e => e.AlternateId).ValueGeneratedOnAdd();
-
                         b.HasMany(e => e.RequiredChildren)
                             .WithOne(e => e.Parent)
                             .HasForeignKey(e => e.ParentId);
